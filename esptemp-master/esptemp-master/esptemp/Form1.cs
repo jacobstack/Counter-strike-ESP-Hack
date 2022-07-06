@@ -10,7 +10,7 @@ namespace esptemp
     {
 
         // OFFSETS ( these are the memory addresses that csgo uses. you can find them online or using cheat engine (harder))
-        const int localplayer = 0x04C88E8;
+        const int localplayer = 0xDBF4CC;
         const int entitylist = 0x4DDB92C;
         const int viewmatrix = 0x4DCD244;
         const int xyz = 0x138;
@@ -186,11 +186,12 @@ namespace esptemp
                         if (ent.team == player.team && ent.bot.X > 0 && ent.bot.X < Width && ent.bot.Y > 0 && ent.bot.Y < Height) //*************** EERRRRRORRRR HEEEEERE
                         {
                             g.DrawRectangle(FriendlyPen, ent.rect());
+                            g.DrawLine(FriendlyPen, Width / 2, Height, ent.bot.X, ent.bot.Y);
                         }
                         else if (ent.team != player.team && ent.bot.X > 0 && ent.bot.X < Width && ent.bot.Y > 0 && ent.bot.Y < Height)
                         {
                             g.DrawRectangle(EnemyPen, ent.rect()); // draw rect at player position
-                            g.DrawLine(EnemyPen, Width / 2, Height, ent.bot.X, ent.bot.Y); // draw line from bottom middle of window to player position
+                            g.DrawLine(EnemyPen, Width / 2, Height, ent.bot.X, ent.bot.Y);
                         }
                     }
                     
