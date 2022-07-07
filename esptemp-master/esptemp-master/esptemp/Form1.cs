@@ -9,18 +9,22 @@ namespace esptemp
     public partial class Form1 : Form
     {
 
-        // OFFSETS ( these are the memory addresses that csgo uses. you can find them online or using cheat engine (harder))
+        // OFFSETS (these are the memory addresses that csgo uses. you can find them online or using cheat engine (harder))
+        // https://github.com/frk1/hazedumper/blob/master/csgo.cs
         const int localplayer = 0xDBF4CC;
         const int entitylist = 0x4DDB92C;
+        //const int glowobjectmanager = ;
         const int viewmatrix = 0x4DCD244;
         const int xyz = 0x138;
         const int team = 0xF4;
         const int dormant = 0xED;
         const int health = 0x100;
+        //const int glowindex = ;
 
         // PEN COLORS
         Pen FriendlyPen = new Pen(Color.Blue, 3);
-        Pen EnemyPen = new Pen(Color.Red, 3);
+        Pen EnemyPen = new Pen(Color.White, 3);
+        
 
         swed swed = new swed();
         ez ez = new ez();
@@ -80,6 +84,8 @@ namespace esptemp
                 var entityteam = BitConverter.ToInt32(swed.ReadBytes(buffer, team, 4), 0);
                 var entitydormant = BitConverter.ToInt32(swed.ReadBytes(buffer, dormant, 4), 0);
                 var entityhealth = BitConverter.ToInt32(swed.ReadBytes(buffer, health, 4), 0);
+
+                HealthPen(entityhealth);
 
 
                 // check if enemy is dead
@@ -170,7 +176,22 @@ namespace esptemp
             return twoD;
         }
 
-
+        Pen HealthPen(int hp)
+        {
+            if (hp >= 100)
+                return new Pen(Color.FromArgb(16, 255, 0), 3);
+            else if (hp > 60)
+                return new Pen(Color.FromArgb(64, 204, 0), 3);
+            else if (hp > 40)    
+                return new Pen(Color.FromArgb(112, 153, 0), 3);
+            else if (hp > 20)
+                return new Pen(Color.FromArgb(159, 102, 0), 3);
+            else if (hp > 1)
+                return new Pen(Color.FromArgb(207, 51, 0), 3);
+            else if (hp == 1)
+                return new Pen(Color.FromArgb(255, 0, 0), 3);
+            return new Pen(Color.Black, 3);
+        }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
@@ -181,16 +202,18 @@ namespace esptemp
 
                 try
                 {
+                    // for each entity in entitylist, draw a a colored rectangle at the position of the entity (depending on team for color)
                     foreach(var ent in list)
                     {
-                        if (ent.team == player.team && ent.bot.X > 0 && ent.bot.X < Width && ent.bot.Y > 0 && ent.bot.Y < Height) //*************** EERRRRRORRRR HEEEEERE
+                        if (ent.team == player.team && ent.bot.X > 0 && ent.bot.X < Width && ent.bot.Y > 0 && ent.bot.Y < Height) 
                         {
                             g.DrawRectangle(FriendlyPen, ent.rect());
                             g.DrawLine(FriendlyPen, Width / 2, Height, ent.bot.X, ent.bot.Y);
                         }
                         else if (ent.team != player.team && ent.bot.X > 0 && ent.bot.X < Width && ent.bot.Y > 0 && ent.bot.Y < Height)
                         {
-                            g.DrawRectangle(EnemyPen, ent.rect()); // draw rect at player position
+                            //g.DrawRectangle(EnemyPen, ent.rect());
+                            g.DrawRectangle(HealthPen(ent.health), ent.rect());
                             g.DrawLine(EnemyPen, Width / 2, Height, ent.bot.X, ent.bot.Y);
                         }
                     }
@@ -199,5 +222,6 @@ namespace esptemp
                 catch { }
             }
         }
+
     }
 }
