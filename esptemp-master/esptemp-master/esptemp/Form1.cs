@@ -11,11 +11,11 @@ namespace esptemp
 
         // OFFSETS (these are the memory addresses that csgo uses. you can find them online or using cheat engine (harder))
         // https://github.com/frk1/hazedumper/blob/master/csgo.cs
-        const int localplayer = 0xDBF4CC;
-        const int entitylist = 0x4DDB92C;
+        const int localplayer = 0xDC14CC;
+        const int entitylist = 0x4DDD93C;
         //const int glowobjectmanager = ;
-        const int viewmatrix = 0x4DCD244;
-        const int xyz = 0x138;
+        const int viewmatrix = 0x4DCF254;
+        const int xyz = 0x138; //m_vecOrigin on hazedumper
         const int team = 0xF4;
         const int dormant = 0xED;
         const int health = 0x100;
